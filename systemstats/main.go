@@ -50,7 +50,8 @@ func main() {
 	handleErr(err)
 
 	// print information on screen
-	fmt.Println("System Statistics")
+	// host
+	fmt.Printf("Host:\t %s\n", osInfo.Hostname)
 
 	// OS
 	fmt.Printf(
@@ -66,9 +67,9 @@ func main() {
 		cpuInfo[0].ModelName, cpuCoresPhysical, cpuCoresLogical, strconv.FormatFloat(cpuInfo[0].Mhz, 'f', -1, 64))
 
 	// memory
-	fmt.Printf("Memory:\t total: %s\tGb\n\t used : %s\tGb\n",
-		roundFloat(float64(memory.Total)/1000000000, 3),
-		roundFloat(float64(memory.Used)/1000000000, 3))
+	fmt.Printf("Memory:\t used : %s\tGb\n\t total: %s\tGb\n",
+		roundFloat(float64(memory.Used)/1000000000, 3),
+		roundFloat(float64(memory.Total)/1000000000, 3))
 
 	// disks
 	fmt.Printf("Disks: ")
