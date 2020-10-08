@@ -6,6 +6,7 @@ import (
 	"math"
 	"strconv"
 
+	"github.com/jaypipes/ghw"
 	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/disk"
 	"github.com/shirou/gopsutil/host"
@@ -49,6 +50,10 @@ func main() {
 	disks, err := disk.Partitions(false)
 	handleErr(err)
 
+	// get gpu information
+	gpu, err := ghw.GPU()
+	handleErr(err)
+
 	// print information on screen
 	// host
 	fmt.Printf("Host:\t %s\n", osInfo.Hostname)
@@ -66,13 +71,19 @@ func main() {
 	fmt.Printf("CPU:\t %s (%d / %d) @ %s Mhz\n",
 		cpuInfo[0].ModelName, cpuCoresPhysical, cpuCoresLogical, strconv.FormatFloat(cpuInfo[0].Mhz, 'f', -1, 64))
 
+	// GPU
+	fmt.Print("GPU: ")
+	for _, card := range gpu.GraphicsCards {
+		fmt.Printf("\t %s: %s\n", card.DeviceInfo.Vendor.Name, card.DeviceInfo.Product.Name)
+	}
+
 	// memory
 	fmt.Printf("Memory:\t used : %s\tGb\n\t total: %s\tGb\n",
 		roundFloat(float64(memory.Used)/1000000000, 3),
 		roundFloat(float64(memory.Total)/1000000000, 3))
 
 	// disks
-	fmt.Printf("Disks: ")
+	fmt.Print("Disks: ")
 	for _, d := range disks {
 		device, err := disk.Usage(d.Mountpoint)
 		handleErr(err)
