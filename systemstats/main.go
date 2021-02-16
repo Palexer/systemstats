@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"math"
+	"os"
 	"strconv"
 
 	"github.com/jaypipes/ghw"
@@ -15,7 +15,8 @@ import (
 
 func handleErr(err error) {
 	if err != nil {
-		log.Println(err)
+		fmt.Println("systemstats (error): ", err)
+		os.Exit(1)
 	}
 }
 
